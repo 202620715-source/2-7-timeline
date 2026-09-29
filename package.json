@@ -1,0 +1,8 @@
+{
+  "name": "bmt-2-7-alarm",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node server.js"
+  }
+}

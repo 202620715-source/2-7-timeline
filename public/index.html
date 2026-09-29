@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>부산기계공업고등학교 2학년 7반 - 시간표 &amp; 급식 알림</title>
+  <link rel="icon" type="image/jpeg" href="logo.jpg">
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="bg-blob blob-a"></div>
+  <div class="bg-blob blob-b"></div>
+
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="hero-left">
+        <img src="logo.jpg" alt="부산기계공업고등학교 로고" class="logo">
+        <div class="hero-title">
+          <h1>부산기계공업고등학교 <span class="class-chip">2학년 7반</span></h1>
+          <p class="date-line" id="dateLine">날짜 로딩 중...</p>
+        </div>
+      </div>
+      <div class="hero-clock">
+        <div class="clock" id="clock">--:--<span class="sec">:--</span></div>
+        <div class="clock-sub">한국 표준시 KST</div>
+      </div>
+    </div>
+  </header>
+
+  <canvas id="fw"></canvas>
+
+  <main class="container">
+    <section class="card status-card">
+      <div class="status-left">
+        <div class="status-label" id="statusLabel">지금</div>
+        <div class="status-main" id="statusMain">불러오는 중...</div>
+        <div class="status-loc" id="statusLoc"></div>
+      </div>
+      <div class="status-right">
+        <div class="status-next" id="statusNext"></div>
+      </div>
+    </section>
+
+    <section class="card snail-card">
+      <div class="snail-head">
+        <h2 class="card-title"><span class="title-ico">🐌</span>집 가기 달팽이 트랙</h2>
+        <span class="snail-label" id="snailLabel"></span>
+      </div>
+      <div class="snail-track" id="snailTrack">
+        <div class="snail-ground"></div>
+        <div class="snail-marker start">🏫 08:30</div>
+        <div class="snail-marker end">🏠 16:20</div>
+        <div class="snail-slime" id="snailSlime"></div>
+        <div class="snail" id="snail">
+          <svg class="snail-svg" viewBox="0 0 64 48" aria-hidden="true">
+            <g class="stalk stalk-back">
+              <line x1="57" y1="28" x2="60" y2="17" stroke="#84cc16" stroke-width="3" stroke-linecap="round"/>
+              <circle cx="60.5" cy="14.5" r="3.2" fill="#84cc16"/>
+              <circle cx="61" cy="14" r="1.3" fill="#374151"/>
+            </g>
+            <g class="stalk">
+              <line x1="54" y1="28" x2="52" y2="16" stroke="#84cc16" stroke-width="3" stroke-linecap="round"/>
+              <circle cx="51.5" cy="13.5" r="3.2" fill="#84cc16"/>
+              <circle cx="51" cy="13" r="1.3" fill="#374151"/>
+            </g>
+            <path d="M3 44 C3 41 8 37 16 35 C22 33.5 30 33 38 33.5 L48 34 C53 34 55 30 56 27 C56.5 25.5 58.5 25.5 59 27 L59.5 31 C60 35 60 39 60 42 C60 43.5 59 44 58 44 Z" fill="#84cc16"/>
+            <path d="M55.5 33 q2 1.8 4.2 0" fill="none" stroke="#3f6212" stroke-width="1.4" stroke-linecap="round"/>
+            <circle cx="30" cy="22" r="14.5" fill="#f59e0b"/>
+            <circle cx="30" cy="22" r="9" fill="#fbbf24"/>
+            <path d="M30 22 a6.5 6.5 0 0 1 6.5 -6.5" fill="none" stroke="#b45309" stroke-width="2.2" stroke-linecap="round"/>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2 class="card-title"><span class="title-ico">📅</span>주간 시간표
+        <button id="imgToggleBtn" class="toggle-btn on" type="button">
+          <span class="toggle-track"><span class="toggle-knob"></span></span>
+          <span id="imgToggleLabel">과목 사진 켜짐</span>
+        </button>
+      </h2>
+      <div class="table-wrap">
+        <table class="timetable" id="timetable">
+          <thead>
+            <tr>
+              <th class="period-col">교시</th>
+              <th data-day="1">월</th>
+              <th data-day="2">화</th>
+              <th data-day="3">수</th>
+              <th data-day="4">목</th>
+              <th data-day="5">금</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card perf-card">
+      <h2 class="card-title"><span class="title-ico">⭐</span>수행평가 추가하기
+        <button id="perfResetBtn" class="toggle-btn" type="button">이번 주 별표 지우기</button>
+      </h2>
+      <p class="perf-hint">요일·교시 버튼을 눌러 수행평가 별표를 표시하세요. 시간표의 오늘 과목에도 ⭐가 붙습니다.</p>
+      <div class="table-wrap"><div class="perf-grid" id="perfGrid"></div></div>
+    </section>
+
+    <section class="card meal-section">
+      <div class="meal-head">
+        <h2 class="card-title"><span class="title-ico">🍽️</span>오늘의 급식</h2>
+        <span class="meal-date" id="mealDate"></span>
+      </div>
+      <div class="meal-grid" id="mealGrid"></div>
+      <p class="meal-src">출처: <a href="https://school.busanedu.net/bmt-h/dv/dietView/selectDietCalendarView.do?mi=605226" target="_blank" rel="noopener">부산기계공업고등학교 오늘의 식단</a> + NEIS 교육청 급식 API + <a href="https://school-meal.asamaru.net/%ED%95%99%EA%B5%90/%EB%B6%80%EC%82%B0%EA%B8%B0%EA%B3%84%EA%B3%B5%EC%97%85%EA%B3%A0%EB%93%B1%ED%95%99%EA%B5%90/" target="_blank" rel="noopener">아사마루 식단표</a> (9/15~9/30 내장)</p>
+    </section>
+
+    <section class="card alarm-card">
+      <h2 class="card-title"><span class="title-ico">⏰</span>알림 시간표</h2>
+      <div class="timeline" id="alarmTimeline"></div>
+      <p class="alarm-hint">💡 알림 항목을 눌러 각 알림을 개별적으로 켜고 끌 수 있어요.</p>
+      <div class="btn-row">
+        <button id="enableNotiBtn" class="btn primary">🔔 알림 + 소리 켜기 (최초 1회)</button>
+        <button id="testHomeBtn" class="btn ghost">하교 알림 테스트</button>
+        <button id="testPhoneBtn" class="btn ghost">폰 제출 알림 테스트</button>
+        <button id="testClassBtn" class="btn ghost">수업 알림 테스트</button>
+      </div>
+      <p class="noti-state" id="notiState"></p>
+    </section>
+
+    <footer class="footer">
+      부산기계공업고등학교 2학년 7반을 위한 시간표 &amp; 급식 알림 · 시간은 한국 표준시 기준
+    </footer>
+  </main>
+
+  <div class="overlay hidden" id="overlay">
+    <div class="modal" id="modal">
+      <div class="modal-top" id="modalTop"></div>
+      <div class="modal-inner-pad">
+        <div class="modal-icon" id="modalIcon"></div>
+        <h3 class="modal-title" id="modalTitle"></h3>
+        <div class="modal-sub" id="modalSub"></div>
+        <div class="modal-body" id="modalBody"></div>
+        <button class="btn primary big" id="modalCloseBtn">확인</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
