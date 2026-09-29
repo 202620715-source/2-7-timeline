@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 
 const PORT = 2727;
-const PUBLIC_DIR = path.join(__dirname, 'public');
+const PUBLIC_DIR = __dirname;
 const DIET_LIST_URL = 'https://school.busanedu.net/bmt-h/dv/dietView/selectDvList.do';
 const NEIS_URL = 'https://open.neis.go.kr/hub/mealServiceDietInfo';
 const SCHOOL_CODE = 'C10';
@@ -172,6 +172,14 @@ const server = http.createServer(async (req, res) => {
 
     let pathname = u.pathname === '/' ? '/index.html' : decodeURIComponent(u.pathname);
     pathname = path.normalize(pathname).replace(/^(\.\.[\/\\])+/, '');
+    const lower = pathname.toLowerCase().replace(/\\/g, '/');
+    const blocked = lower.startsWith('/server.js') || lower.startsWith('/package')
+      || lower.startsWith('/start.bat') || lower.startsWith('/.git') || lower.startsWith('/bmt.img');
+    if (blocked) {
+      res.writeHead(403);
+      res.end('Forbidden');
+      return;
+    }
     const file = path.join(PUBLIC_DIR, pathname);
     if (!file.startsWith(PUBLIC_DIR)) {
       res.writeHead(403);
